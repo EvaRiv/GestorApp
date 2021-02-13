@@ -78,7 +78,7 @@ export default class CambiarPW extends React.Component{
     if(!expression.test(String(np))){
       pwerrors.push('La contraseña debe tener al menos un número.')
     }
-    expression = /(\$|\#|\?|\-|\#|\&|\%|\*|_|!|)/
+    expression = /[$-/:-?{-~!"^_`\[\]]/
     if(!expression.test(String(np))){
       pwerrors.push('La contraseña debe tener al menos un caracter especial.')
     }
@@ -100,8 +100,8 @@ export default class CambiarPW extends React.Component{
     const cuentas = this.state.accounts
     return(
       <Layout>
-        <h2>Cambiar una contraseña</h2>
-        <h4>Elige una cuenta para la cual quieres cambiar la contraseña</h4>
+        <h2>Agregar nuevo usuario y contraseña</h2>
+        <h5>Ingresa el nombre del usuario y la nueva contraseña.</h5>
         <FormStyles>
          
           <Form
@@ -127,7 +127,7 @@ export default class CambiarPW extends React.Component{
                 if(!expression.test(String(values.nuevo_pw))){
                   pwerrors = pwerrors.concat('La contraseña debe tener al menos un número, ')
                 }
-                expression = /[$-/:-?{-~!"^_`\[\]]/;
+                expression = /(\$|\#|\?|\-|\#|\&|\%|\*|_|!|)/;
                 if(!expression.test(String(values.nuevo_pw))){
                   pwerrors = pwerrors.concat('La contraseña debe tener al menos un caracter especial, ')
                 }
@@ -141,37 +141,31 @@ export default class CambiarPW extends React.Component{
             } }
             render={({handleSubmit, form, submitting, invalid, pristine, values, }) => (
               <form onSubmit={handleSubmit}>
-               
-               <div>
-               {cuentas.map(cuenta =>(
-               <label>
-                
-                <Field
-                  name="cuentas"
-                  component="input"
-                  type="radio"
-                  value={cuenta}
-                />{' '}
-                {cuenta}
-                <br></br>
-              </label>
-              
-              ))}
-               </div> 
                <br></br>
-                 
-                  <label>
-                    <strong>Contraseña Sugerida</strong>
-                    <br></br>
-                    
-                  </label>
+               <Field name="nuevo_usr">
+                  {({ input, meta }) => (
                   
+                      <div>
+                      <label>Nuevo usuario</label>
+                      <input {...input} type="text" placeholder="Usuario" />
+                      {meta.touched}
+                      </div>
+                      
+                 
+                    
+                  )}
+                </Field>
+              
+               <br></br>
+               
+                 <div>
                   <label>
-                    <br></br>
-                    <strong>{this.generatePW()}</strong>
+                    <strong>Contraseña Sugerida <span>{this.generatePW()}</span></strong>
                     <br></br>
                     
                   </label>
+                  </div>
+                
                  
 
                <br></br>
@@ -221,7 +215,7 @@ export default class CambiarPW extends React.Component{
                     Cancelar
                     </button>
                   <button  type = "button" disabled={invalid}>
-                    Cambiar Contraseña
+                    Agregar usuario y contraseña
                   </button>
                  
                 </div>
