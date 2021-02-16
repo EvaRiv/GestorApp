@@ -1,34 +1,33 @@
 import React from "react"
 import Layout from "../components/layout"
-import { Form, Field, useFormState, FormSpy } from 'react-final-form'
-import FormStyles from '../components/FormStyles'
-import {navigate} from "gatsby"
-import Twocols from '../components/twocols'
+import { Form, Field, useFormState, FormSpy } from "react-final-form"
+import FormStyles from "../components/FormStyles"
+import { navigate } from "gatsby"
+import sha256 from 'crypto-js/sha256';
+import CryptoJS from 'crypto-js'
 
-function getRandomUpperCase(){
-  return String.fromCharCode(Math.floor(Math.random()*26)+65);
- }
- function getRandomLowerCase(){
-  return String.fromCharCode(Math.floor(Math.random()*26)+97);
+function getRandomUpperCase() {
+  return String.fromCharCode(Math.floor(Math.random() * 26) + 65)
 }
-function getRandomNumber(){
-  return String.fromCharCode(Math.floor(Math.random()*10)+48);
+function getRandomLowerCase() {
+  return String.fromCharCode(Math.floor(Math.random() * 26) + 97)
 }
-function getRandomSymbol(){
-  var symbol = "!@#$%^&*(){}[]=<>/,.|~?";
-  return symbol[Math.floor(Math.random()*symbol.length)];
+function getRandomNumber() {
+  return String.fromCharCode(Math.floor(Math.random() * 10) + 48)
+}
+function getRandomSymbol() {
+  var symbol = "!@#$%^&*(){}[]=<>/,.|~?"
+  return symbol[Math.floor(Math.random() * symbol.length)]
 }
 
-
-
-export default class CambiarPW extends React.Component{
-  state ={
-    new_vals : undefined,
-    accounts: ['juanita34','jn1233','juanitasuave','juanis', 'juanibanani']
+export default class CambiarPW extends React.Component {
+  state = {
+    new_vals: undefined,
+    accounts: ["juanita34", "jn1233", "juanitasuave", "juanis", "juanibanani"],
   }
 
-  changeStateValues = values =>{
-    this.setState({new_vals: values})
+  changeStateValues = values => {
+    this.setState({ new_vals: values })
   }
   /*
   getData(){
@@ -40,154 +39,175 @@ export default class CambiarPW extends React.Component{
     this.getData();
   }
   */
-  onCancel = event =>{
-    navigate('main',{
-      state:{
-        data: undefined
-      }
+  onCancel = event => {
+    navigate("main", {
+      state: {
+        data: undefined,
+      },
     })
   }
-  generatePW(){
-    const randomFunc = {
-      upper : getRandomUpperCase,
-      lower : getRandomLowerCase,
-      number : getRandomNumber,
-      symbol : getRandomSymbol
-    };
-    return(
-      <label>amdeETNDU3FF?2NCEiakej23921</label>
-    )
+  generatePW() {
+    const password = require('secure-random-password');
+    const rand = password.randomPassword({ length: 10, characters: [password.lower, password.upper, password.digits, password.symbols] })
+    document.getElementById("randompw").innerHTML = rand;
   }
-  validatePW = np =>{
-    
+  validatePW = np => {
     var pwerrors = []
-    
-    if((np.length)<10){
-      pwerrors.push('La contraseña debe tener más de 10 caracteres.')
+
+    if (np.length < 10) {
+      pwerrors.push("La contraseña debe tener más de 10 caracteres.")
     }
-    
+
     var expression = /[a-z]/
-    if(!expression.test(String(np))){
-      pwerrors.push('La contraseña debe tener al menos una letra minúscula.')
+    if (!expression.test(String(np))) {
+      pwerrors.push("La contraseña debe tener al menos una letra minúscula.")
     }
     expression = /[A-Z]/
-    if(!expression.test(String(np))){
-      pwerrors.push('La contraseña debe tener al menos una letra mayúscula.')
+    if (!expression.test(String(np))) {
+      pwerrors.push("La contraseña debe tener al menos una letra mayúscula.")
     }
     expression = /[0-9]/
-    if(!expression.test(String(np))){
-      pwerrors.push('La contraseña debe tener al menos un número.')
+    if (!expression.test(String(np))) {
+      pwerrors.push("La contraseña debe tener al menos un número.")
     }
     expression = /(\$|\#|\?|\-|\#|\&|\%|\*|_|!|)/
-    if(!expression.test(String(np))){
-      pwerrors.push('La contraseña debe tener al menos un caracter especial.')
+    if (!expression.test(String(np))) {
+      pwerrors.push("La contraseña debe tener al menos un caracter especial.")
     }
-    
-   
+
     return pwerrors
   }
-  onSubmit = event =>{
+  onSubmit = event => {
+    /*
     navigate('main',{
       state:{
         data: this.state.new_vals
       }
     })
+    */
+   
+    console.log("aaaaaaaaaaaa")
+    const masterKey = "holiwis"
+    const masterHash = String(sha256(masterKey));
+    var encrypted = CryptoJS.DES.encrypt("gestor de Eva y Miguel", masterHash);
+    var decrypted = CryptoJS.DES.decrypt(encrypted, masterHash);
+    console.log(encrypted)
+    var result2 = CryptoJS.enc.Utf8.stringify(decrypted);
+    console.log(result2)
   }
 
-
-
-  render(){
+  render() {
     const cuentas = this.state.accounts
-    return(
+    return (
       <Layout>
         <h2>Cambiar una contraseña</h2>
         <h4>Elige una cuenta para la cual quieres cambiar la contraseña</h4>
         <FormStyles>
-         
           <Form
             onSubmit={this.onSubmit}
-            validate={values=>{
+            validate={values => {
+              
               const errors = {}
-              if(values.nuevo_pw!==undefined){
+              if (values.nuevo_pw !== undefined) {
                 var pwerrors = ""
-                if((values.nuevo_pw).length<10){
-                  pwerrors = pwerrors.concat('La contraseña debe tener más de 10 caracteres, ')
+                if (values.nuevo_pw.length < 10) {
+                  pwerrors = pwerrors.concat(
+                    "La contraseña debe tener más de 10 caracteres, "
+                  )
                 }
-                
-                var expression = /[a-z]/;
-                if(!expression.test(String(values.nuevo_pw))){
-                  pwerrors = pwerrors.concat('La contraseña debe tener al menos una letra minúscula, ')
+
+                var expression = /[a-z]/
+                if (!expression.test(String(values.nuevo_pw))) {
+                  pwerrors = pwerrors.concat(
+                    "La contraseña debe tener al menos una letra minúscula, "
+                  )
                 }
-                
-                expression = /[A-Z]/;
-                if(!expression.test(String(values.nuevo_pw))){
-                  pwerrors = pwerrors.concat('La contraseña debe tener al menos una letra mayúscula, ')
+
+                expression = /[A-Z]/
+                if (!expression.test(String(values.nuevo_pw))) {
+                  pwerrors = pwerrors.concat(
+                    "La contraseña debe tener al menos una letra mayúscula, "
+                  )
                 }
-                expression = /[0-9]/;
-                if(!expression.test(String(values.nuevo_pw))){
-                  pwerrors = pwerrors.concat('La contraseña debe tener al menos un número, ')
+                expression = /[0-9]/
+                if (!expression.test(String(values.nuevo_pw))) {
+                  pwerrors = pwerrors.concat(
+                    "La contraseña debe tener al menos un número, "
+                  )
                 }
-                expression = /[$-/:-?{-~!"^_`\[\]]/;
-                if(!expression.test(String(values.nuevo_pw))){
-                  pwerrors = pwerrors.concat('La contraseña debe tener al menos un caracter especial, ')
+                expression = /[$-/:-?{-~!"^_`\[\]]/
+                if (!expression.test(String(values.nuevo_pw))) {
+                  pwerrors = pwerrors.concat(
+                    "La contraseña debe tener al menos un caracter especial, "
+                  )
                 }
-                if (pwerrors!=""){
-                errors.nuevo_pw = pwerrors}
-                if(values.nuevo_pw_confirm!==values.nuevo_pw){
-                  errors.nuevo_pw_confirm = 'Las contraseñas no son iguales.'
+                if (pwerrors != "") {
+                  errors.nuevo_pw = pwerrors
+                }
+                if (values.nuevo_pw_confirm !== values.nuevo_pw) {
+                  errors.nuevo_pw_confirm = "Las contraseñas no son iguales."
                 }
               }
               return errors
-            } }
-            render={({handleSubmit, form, submitting, invalid, pristine, values, }) => (
+            }}
+            render={({
+              handleSubmit,
+              form,
+              submitting,
+              invalid,
+              pristine,
+              values,
+            }) => (
               <form onSubmit={handleSubmit}>
-               
-               <div>
-               {cuentas.map(cuenta =>(
-               <label>
-                
-                <Field
-                  name="cuentas"
-                  component="input"
-                  type="radio"
-                  value={cuenta}
-                />{' '}
-                {cuenta}
+                <div>
+                  {cuentas.map(cuenta => (
+                    <label>
+                      <Field
+                        name="cuentas"
+                        component="input"
+                        type="radio"
+                        value={cuenta}
+                      />{" "}
+                      {cuenta}
+                      <br></br>
+                    </label>
+                  ))}
+                </div>
                 <br></br>
-              </label>
-              
-              ))}
-               </div> 
-               <br></br>
-                 
-                  <label>
-                    <strong>Contraseña Sugerida</strong>
-                    <br></br>
-                    
-                  </label>
-                  
-                  <label>
-                    <br></br>
-                    <strong>{this.generatePW()}</strong>
-                    <br></br>
-                    
-                  </label>
-                 
+                <div>
+                <label>
+                  <strong>Contraseña Sugerida</strong>
+                  <br></br>
+                </label>
 
-               <br></br>
-               <Field name="nuevo_pw">
+                <label>
+                  
+                  <strong><span id="randompw">{this.generatePW}</span></strong>
+                  <br></br>
+                  <button type="button" onClick={this.generatePW}>
+                    Generar Contraseña
+                  </button>
+                
+                </label>
+                </div>
+                
+                <br></br>
+                <Field name="nuevo_pw">
                   {({ input, meta }) => (
                     <div class="row">
                       <div class="column">
-                      <label>Nueva Contraseña</label>
-                      <input {...input} type="password" placeholder="Contraseña" />
-                      {meta.touched}
+                        <label>Nueva Contraseña</label>
+                        <input
+                          {...input}
+                          type="password"
+                          placeholder="Contraseña"
+                        />
+                        {meta.touched}
                       </div>
                       <div class="column">
                         {meta.error && <p>{meta.error}</p>}
                       </div>
                     </div>
-                    
                   )}
                 </Field>
                 <br></br>
@@ -196,55 +216,47 @@ export default class CambiarPW extends React.Component{
                   {({ input, meta }) => (
                     <div class="row">
                       <div class="column">
-                      <label>Confirmar Contraseña</label>
-                      <input {...input} type="password" placeholder="Contraseña" />
-                      {meta.touched}
+                        <label>Confirmar Contraseña</label>
+                        <input
+                          {...input}
+                          type="password"
+                          placeholder="Contraseña"
+                        />
+                        {meta.touched}
                       </div>
                       <div class="column">
                         {meta.error && <p>{meta.error}</p>}
                       </div>
                     </div>
-                    
                   )}
                 </Field>
                 <br></br>
                 <div className="buttons">
-                  
                   <button
                     type="button"
                     onClick={form.reset}
-                    disabled={submitting || pristine }
+                    disabled={submitting || pristine}
                   >
                     Limpiar
                   </button>
                   <button type="button" onClick={this.onCancel}>
                     Cancelar
-                    </button>
-                  <button  type = "button" disabled={invalid}>
+                  </button>
+                  <button type="submit" disabled={invalid}>
                     Cambiar Contraseña
                   </button>
-                 
                 </div>
-             
-              
-              
-              
-              <FormSpy
-                  
+
+                <FormSpy
                   onChange={props => {
                     this.changeStateValues(values)
                   }}
                 />
-                
               </form>
             )}
           />
-        
         </FormStyles>
       </Layout>
     )
-
   }
-
-
 }
