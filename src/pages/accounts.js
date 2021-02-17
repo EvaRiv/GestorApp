@@ -50,7 +50,9 @@ export default class SeeAccounts extends React.Component {
   chngPw = event =>{
     navigate("/changePw", {
       state: {
-        data: this.state.accs,
+        data: {
+          accs: this.state.accs
+        }
       },
     })
   }
@@ -58,7 +60,9 @@ export default class SeeAccounts extends React.Component {
   addPw = event =>{
     navigate("/newPw", {
       state: {
-        data: this.state.accs,
+        data: {
+          accs: this.state.accs
+        }
       },
     })
   }
@@ -70,11 +74,11 @@ export default class SeeAccounts extends React.Component {
     var user_selected = String(this.state.new_vals.cuentas)
     var encrypted = this.state.accs[user_selected] 
  
-    console.log(encrypted)
+    
     var decrypted = CryptoJS.DES.decrypt(encrypted, masterHash);
     
     var result = CryptoJS.enc.Utf8.stringify(decrypted);
-    console.log(result)
+    
     document.getElementById("pw_revealed").innerHTML = result;
     
 
@@ -159,7 +163,7 @@ export default class SeeAccounts extends React.Component {
                     Agregar cuenta y contraseña
                   </button>
                   <button type="button" onClick={this.chngPw}>
-                    Cambar una contraseña
+                    Cambiar una contraseña
                   </button>
                 </div>
 

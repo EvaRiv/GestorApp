@@ -5,7 +5,8 @@ import { Form, Field, FormSpy } from "react-final-form"
 import { navigate } from "gatsby"
 
 const user = "miguelcienfuentes"
-const pw = "aMiguelLeGustaElHelado20391?"
+//const pw = "aMiguelLeGustaElHelado20391?"
+const pw = "holi"
 
 class Home extends Component {
   state = {
