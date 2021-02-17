@@ -16,7 +16,9 @@ class Home extends Component {
 
     navigate("accounts", {
       state: {
-        data: undefined,
+        data: {
+          flag: 0
+        }
       },
     })
 

@@ -6,13 +6,26 @@ import { navigate } from "gatsby"
 import sha256 from 'crypto-js/sha256';
 import CryptoJS from 'crypto-js'
 
-var accs = require('../files/registers.json');
+var cuentas_ini = require('../files/registers.json');
 
 
 export default class SeeAccounts extends React.Component {
   state = {
     new_vals: undefined,
-    
+    accs : undefined,
+    flag : undefined
+  }
+  getData(){
+    var bandera = this.props.location.state.data.flag
+    if (bandera===0){ //si vengo del home
+      this.setState({
+          accs : cuentas_ini,
+          flag : bandera
+      })
+    }
+  }
+  componentDidMount(){
+    this.getData()
   }
   getJsonKeys = data =>{
     var cuentas = []
@@ -36,25 +49,22 @@ export default class SeeAccounts extends React.Component {
     })
   }
   revealPw = event =>{
-    var masterHash = String(sha256("chuiYMikeSonPesimosEnBeerPong123?"));
-    var data_stuff = {}
-    var arr = ["!s$C95$g3h","Le$T6R^VQk","n#yY8y#c2q","6%a6RmU8%Z","N#9GZQKhPk"];
-    var i = 0;
-    for(var key in accs){
-      data_stuff[key] = CryptoJS.DES.encrypt(arr[i], masterHash);
-    }
-    console.log(data_stuff)
-    const jsonfile = require('jsonfile')
+  
+    var mp_entered = String(this.state.new_vals.master)
+    
+    var masterHash = String(sha256(mp_entered));
+    var user_selected = String(this.state.new_vals.cuentas)
+    var encrypted = this.state.accs[user_selected] 
  
-    const file = './registers.json'
+    console.log(encrypted)
+    var decrypted = CryptoJS.DES.decrypt(encrypted, masterHash);
     
-    jsonfile.writeFile(file, data_stuff, function (err) {
-      if (err) console.error(err)
-})
+    var result = CryptoJS.enc.Utf8.stringify(decrypted);
+    console.log(result)
+    document.getElementById("pw_revealed").innerHTML = result;
     
-   
-    
-    //document.getElementById("pw_revealed").innerHTML = result;
+
+
   }
   
   onSubmit = event => {
@@ -69,7 +79,7 @@ export default class SeeAccounts extends React.Component {
   }
 
   render() {
-    const cuentas = this.getJsonKeys(accs);
+    const cuentas = this.getJsonKeys(this.state.accs);
     return (
       <Layout>
         <h2>Ver contraseñas almacenadas</h2>
