@@ -22,6 +22,11 @@ export default class SeeAccounts extends React.Component {
           accs : cuentas_ini,
           flag : bandera
       })
+    }else{
+      this.setState({
+        accs : this.props.location.state.data.accs,
+        flag : bandera
+    })
     }
   }
   componentDidMount(){
@@ -41,10 +46,19 @@ export default class SeeAccounts extends React.Component {
     this.setState({ new_vals: values })
   }
   
-  onCancel = event => {
-    navigate("main", {
+  
+  chngPw = event =>{
+    navigate("/changePw", {
       state: {
-        data: undefined,
+        data: this.state.accs,
+      },
+    })
+  }
+
+  addPw = event =>{
+    navigate("/newPw", {
+      state: {
+        data: this.state.accs,
       },
     })
   }
@@ -140,6 +154,12 @@ export default class SeeAccounts extends React.Component {
 
                   <button type="button" onClick={this.revealPw}>
                     Revelar contraseña
+                  </button>
+                  <button type="button" onClick={this.addPw}>
+                    Agregar cuenta y contraseña
+                  </button>
+                  <button type="button" onClick={this.chngPw}>
+                    Cambar una contraseña
                   </button>
                 </div>
 
