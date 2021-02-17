@@ -74,13 +74,14 @@ export default class CambiarPW extends React.Component {
     */
    
     console.log("aaaaaaaaaaaa")
-    const masterKey = "holiwis"
+    const masterKey = "chuiYMikeSonPesimosEnBeerPong123?"
     const masterHash = String(sha256(masterKey));
-    var encrypted = CryptoJS.DES.encrypt("gestor de Eva y Miguel", masterHash);
+    var encrypted = CryptoJS.DES.encrypt("!dmt*R@E%2", masterHash);
     var decrypted = CryptoJS.DES.decrypt(encrypted, masterHash);
     console.log(encrypted)
+    console.log(String(encrypted.ciphertext));
     var result2 = CryptoJS.enc.Utf8.stringify(decrypted);
-    console.log(result2)
+
   }
 
   render() {

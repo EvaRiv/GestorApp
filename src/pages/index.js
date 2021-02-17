@@ -13,16 +13,13 @@ class Home extends Component {
   }
 
   onSubmit = () => {
-    console.log(this.state.new_vals)
-    if(this.state.new_vals.usuario == user && this.state.contrasenia == pw){
+
     navigate("accounts", {
       state: {
         data: undefined,
       },
     })
-    }else{
-      window.alert("Credenciales incorrectas.")
-    }
+
   }
   changeStateValues = values => {
     this.setState({ new_vals: values })

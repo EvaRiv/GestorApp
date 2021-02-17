@@ -5,19 +5,7 @@ import FormStyles from "../components/FormStyles"
 import { navigate } from "gatsby"
 import sha256 from "crypto-js/sha256"
 
-function getRandomUpperCase() {
-  return String.fromCharCode(Math.floor(Math.random() * 26) + 65)
-}
-function getRandomLowerCase() {
-  return String.fromCharCode(Math.floor(Math.random() * 26) + 97)
-}
-function getRandomNumber() {
-  return String.fromCharCode(Math.floor(Math.random() * 10) + 48)
-}
-function getRandomSymbol() {
-  var symbol = "!@#$%^&*(){}[]=<>/,.|~?"
-  return symbol[Math.floor(Math.random() * symbol.length)]
-}
+
 
 export default class CambiarPW extends React.Component {
   state = {
@@ -28,16 +16,7 @@ export default class CambiarPW extends React.Component {
   changeStateValues = values => {
     this.setState({ new_vals: values })
   }
-  /*
-  getData(){
-    this.setState({
-      accounts: this.props.location.state.data //THIS THIS THIS
-    })
-  }
-  componentDidMount(){
-    this.getData();
-  }
-  */
+
   onCancel = event => {
     navigate("main", {
       state: {
@@ -45,15 +24,7 @@ export default class CambiarPW extends React.Component {
       },
     })
   }
-  generatePW() {
-    const randomFunc = {
-      upper: getRandomUpperCase,
-      lower: getRandomLowerCase,
-      number: getRandomNumber,
-      symbol: getRandomSymbol,
-    }
-    return <label>amdeETNDU3FF?2NCEiakej23921</label>
-  }
+  
   validatePW = np => {
     var pwerrors = []
 
@@ -88,13 +59,7 @@ export default class CambiarPW extends React.Component {
       }
     })
     */
-    const Encryption = require("node_triple_des")
 
-    const encrypt = Encryption.encrypt("holis", "bla bla bla")
-    console.log(encrypt)
-
-    const decrypt = Encryption.decrypt("SharedKey", "CipherText")
-    console.log(decrypt)
   }
 
   render() {
