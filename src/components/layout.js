@@ -10,8 +10,7 @@ import { css } from "@emotion/react"
 import { useStaticQuery, graphql,Link } from "gatsby"
 import { rhythm } from "../utils/typography"
 import Header from "./header"
-
-
+import "../components/customize.css"
 
 export default function Layout({ children }) {
   const data = useStaticQuery(graphql`
@@ -24,24 +23,9 @@ export default function Layout({ children }) {
     }
   `)
   return (
-    <div
-      css={css`
-        margin: 0 auto;
-        max-width: 1000px;
-        padding: ${rhythm(2)};
-        padding-top: ${rhythm(1.5)};
-      `}
-    >
+    <div class = "pageContainer">
       
-        <Header
-          css={css`
-            margin-bottom: ${rhythm(2)};
-            display: inline-block;
-            font-style: normal;
-          `}
-        
-          siteTitle = {data.site.siteMetadata.title}
-        />
+        <Header siteTitle = {data.site.siteMetadata.title}/>
       
       
       {children}

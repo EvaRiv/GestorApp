@@ -6,13 +6,31 @@ import { navigate } from "gatsby"
 import sha256 from 'crypto-js/sha256';
 import CryptoJS from 'crypto-js'
 
-var accs = require('../files/registers.json');
+var cuentas_ini = require('../files/registers.json');
 
 
 export default class SeeAccounts extends React.Component {
   state = {
     new_vals: undefined,
-    
+    accs : undefined,
+    flag : undefined
+  }
+  getData(){
+    var bandera = this.props.location.state.data.flag
+    if (bandera===0){ //si vengo del home
+      this.setState({
+          accs : cuentas_ini,
+          flag : bandera
+      })
+    }else{
+      this.setState({
+        accs : this.props.location.state.data.accs,
+        flag : bandera
+    })
+    }
+  }
+  componentDidMount(){
+    this.getData()
   }
   getJsonKeys = data =>{
     var cuentas = []
@@ -28,33 +46,43 @@ export default class SeeAccounts extends React.Component {
     this.setState({ new_vals: values })
   }
   
-  onCancel = event => {
-    navigate("main", {
+  
+  chngPw = event =>{
+    navigate("/changePw", {
       state: {
-        data: undefined,
+        data: {
+          accs: this.state.accs
+        }
+      },
+    })
+  }
+
+  addPw = event =>{
+    navigate("/newPw", {
+      state: {
+        data: {
+          accs: this.state.accs
+        }
       },
     })
   }
   revealPw = event =>{
-    var masterHash = String(sha256("chuiYMikeSonPesimosEnBeerPong123?"));
-    var data_stuff = {}
-    var arr = ["!s$C95$g3h","Le$T6R^VQk","n#yY8y#c2q","6%a6RmU8%Z","N#9GZQKhPk"];
-    var i = 0;
-    for(var key in accs){
-      data_stuff[key] = CryptoJS.DES.encrypt(arr[i], masterHash);
-    }
-    console.log(data_stuff)
-    const jsonfile = require('jsonfile')
+  
+    var mp_entered = String(this.state.new_vals.master)
+    
+    var masterHash = String(sha256(mp_entered));
+    var user_selected = String(this.state.new_vals.cuentas)
+    var encrypted = this.state.accs[user_selected] 
  
-    const file = './registers.json'
     
-    jsonfile.writeFile(file, data_stuff, function (err) {
-      if (err) console.error(err)
-})
+    var decrypted = CryptoJS.DES.decrypt(encrypted, masterHash);
     
-   
+    var result = CryptoJS.enc.Utf8.stringify(decrypted);
     
-    //document.getElementById("pw_revealed").innerHTML = result;
+    document.getElementById("pw_revealed").innerHTML = result;
+    
+
+
   }
   
   onSubmit = event => {
@@ -69,11 +97,13 @@ export default class SeeAccounts extends React.Component {
   }
 
   render() {
-    const cuentas = this.getJsonKeys(accs);
+    const cuentas = this.getJsonKeys(this.state.accs);
     return (
       <Layout>
-        <h2>Ver contraseñas almacenadas</h2>
-        <h4>Elige una cuenta para la cual quieres revelar la contraseña.</h4>
+        <div class="accountsContainer">
+          <div class = "form">
+          <p class="loginHeader">Ver contraseñas almacenadas</p>
+        <p class="accountsSubHeader">Elige una cuenta para la cual quieres revelar la contraseña.</p>
         <FormStyles>
           <Form
             onSubmit={this.onSubmit}
@@ -111,12 +141,12 @@ export default class SeeAccounts extends React.Component {
                 
                 <Field name="master">
                     {({ input, meta }) => (
-                      <div class="row">
-                        <div class="column">
+                      <div class="rowCustomAccounts">
+
                           <label>Ingresa la contraseña maestra para ver una contraseña</label>
                           <input {...input} type="password" />
                           {meta.touched}
-                        </div>
+
                         
                         <div class="column">
                           {meta.error && <p>{meta.error}</p>}
@@ -126,10 +156,16 @@ export default class SeeAccounts extends React.Component {
                     )}
                   </Field>
                 
-                <div className="buttons">
+                <div className="rowCustomAccounts">
 
-                  <button type="button" onClick={this.revealPw}>
+                  <button class = "loginButton" type="button" onClick={this.revealPw}>
                     Revelar contraseña
+                  </button>
+                  <button class = "loginButton" type="button" onClick={this.addPw}>
+                    Agregar cuenta y contraseña
+                  </button>
+                  <button class = "loginButton" type="button" onClick={this.chngPw}>
+                    Cambiar una contraseña
                   </button>
                 </div>
 
@@ -142,6 +178,9 @@ export default class SeeAccounts extends React.Component {
             )}
           />
         </FormStyles>
+          </div>
+        </div>
+
       </Layout>
     )
   }
