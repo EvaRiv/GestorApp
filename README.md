@@ -8,4 +8,6 @@
   Gestor de contraseñas
 </h1>
 
+<h2>Eva Rivarola y Miguel Cifuentes</h2>
+
 
