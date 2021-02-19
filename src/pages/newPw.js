@@ -102,6 +102,7 @@ export default class CambiarPW extends React.Component {
                 onSubmit={this.onSubmit}
                 validate={values => {
                   const errors = {}
+                  
                   if (values.nuevo_pw !== undefined) {
                     var pwerrors = ""
                     if (values.nuevo_pw.length < 10) {
@@ -144,6 +145,7 @@ export default class CambiarPW extends React.Component {
                     }
                   }
                   return errors
+                  
                 }}
                 render={({
                   handleSubmit,
@@ -195,7 +197,7 @@ export default class CambiarPW extends React.Component {
                             {meta.touched}
 
                           <div class="column">
-                            {meta.error && <p>{meta.error}</p>}
+                            {meta.error && <p>Faltan caracteres</p>}
                           </div>
                         </div>
                       )}
@@ -232,7 +234,7 @@ export default class CambiarPW extends React.Component {
                         Cancelar
                       </button>
                       <button class = "loginButton" type="submit" disabled={invalid}>
-                        Cambiar Contraseña
+                        Agregar
                       </button>
                     </div>
 

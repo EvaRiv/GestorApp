@@ -101,8 +101,11 @@ export default class CambiarPW extends React.Component {
               <Form
                 onSubmit={this.onSubmit}
                 validate={values => {
+                  
                   const errors = {}
+                  
                   if (values.nuevo_pw !== undefined) {
+                    
                     var pwerrors = ""
                     if (values.nuevo_pw.length < 10) {
                       pwerrors = pwerrors.concat(
@@ -143,6 +146,7 @@ export default class CambiarPW extends React.Component {
                         "Las contraseñas no son iguales."
                     }
                   }
+                  
                   return errors
                 }}
                 render={({
@@ -200,9 +204,9 @@ export default class CambiarPW extends React.Component {
                               placeholder="Contraseña"
                             />
                             {meta.touched}
-
+                          
                           <div class="column">
-                            {meta.error && <p>{meta.error}</p>}
+                          {meta.error && <p>Faltan caracteres</p>}
                           </div>
                         </div>
                       )}
