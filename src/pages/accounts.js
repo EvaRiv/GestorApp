@@ -100,8 +100,10 @@ export default class SeeAccounts extends React.Component {
     const cuentas = this.getJsonKeys(this.state.accs);
     return (
       <Layout>
-        <h2>Ver contraseñas almacenadas</h2>
-        <h4>Elige una cuenta para la cual quieres revelar la contraseña.</h4>
+        <div class="accountsContainer">
+          <div class = "form">
+          <p class="loginHeader">Ver contraseñas almacenadas</p>
+        <p class="accountsSubHeader">Elige una cuenta para la cual quieres revelar la contraseña.</p>
         <FormStyles>
           <Form
             onSubmit={this.onSubmit}
@@ -139,12 +141,12 @@ export default class SeeAccounts extends React.Component {
                 
                 <Field name="master">
                     {({ input, meta }) => (
-                      <div class="row">
-                        <div class="column">
+                      <div class="rowCustomAccounts">
+
                           <label>Ingresa la contraseña maestra para ver una contraseña</label>
                           <input {...input} type="password" />
                           {meta.touched}
-                        </div>
+
                         
                         <div class="column">
                           {meta.error && <p>{meta.error}</p>}
@@ -154,15 +156,15 @@ export default class SeeAccounts extends React.Component {
                     )}
                   </Field>
                 
-                <div className="buttons">
+                <div className="rowCustomAccounts">
 
-                  <button type="button" onClick={this.revealPw}>
+                  <button class = "loginButton" type="button" onClick={this.revealPw}>
                     Revelar contraseña
                   </button>
-                  <button type="button" onClick={this.addPw}>
+                  <button class = "loginButton" type="button" onClick={this.addPw}>
                     Agregar cuenta y contraseña
                   </button>
-                  <button type="button" onClick={this.chngPw}>
+                  <button class = "loginButton" type="button" onClick={this.chngPw}>
                     Cambiar una contraseña
                   </button>
                 </div>
@@ -176,6 +178,9 @@ export default class SeeAccounts extends React.Component {
             )}
           />
         </FormStyles>
+          </div>
+        </div>
+
       </Layout>
     )
   }

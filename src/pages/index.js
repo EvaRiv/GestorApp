@@ -14,15 +14,13 @@ class Home extends Component {
   }
 
   onSubmit = () => {
-
     navigate("accounts", {
       state: {
         data: {
-          flag: 0
-        }
+          flag: 0,
+        },
       },
     })
-
   }
   changeStateValues = values => {
     this.setState({ new_vals: values })
@@ -35,81 +33,78 @@ class Home extends Component {
   render() {
     return (
       <Layout>
-        <FormStyles>
-          <Form
-            onSubmit={this.onSubmit}
-            render={({
-              handleSubmit,
-              form,
-              submitting,
-              invalid,
-              pristine,
-              values,
-            }) => {
-              return (
-                <form onSubmit={handleSubmit}>
-                  <Field name="usuario">
-                    {({ input, meta }) => (
-                      <div class="row">
-                        <div class="column">
-                          <label>Usuario</label>
-                          <input {...input} type="text" placeholder="Usuario" />
-                          {meta.touched}
-                        </div>
-                        
-                        <div class="column">
-                          {meta.error && <p>{meta.error}</p>}
-                        </div>
+        <div class="loginContainer">
+          <FormStyles>
+            <Form
+              onSubmit={this.onSubmit}
+              render={({
+                handleSubmit,
+                form,
+                submitting,
+                invalid,
+                pristine,
+                values,
+              }) => {
+                return (
+                  <div class="formContainer">
+                    <form class="form" onSubmit={handleSubmit}>
+                      <p class="loginHeader">
+                        {" "}
+                        Ingresa tus credenciales para acceder
+                      </p>
+                      <Field name="usuario">
+                        {({ input, meta }) => (
+                          <div class="rowCustom">
+                            <label>Usuario</label>
+                            <input
+                              {...input}
+                              type="text"
+                              placeholder="Usuario"
+                            />
+                            {meta.touched}
+                          </div>
+                        )}
+                      </Field>
 
-                      </div>
-                    )}
-                  </Field>
+                      <Field name="contrasenia">
+                        {({ input, meta }) => (
+                          <div class="rowCustom">
+                            <label>Contraseña</label>
+                            <input
+                              {...input}
+                              type="password"
+                              placeholder="Contraseña"
+                            />
+                            {meta.touched}
+                          </div>
+                        )}
+                      </Field>
 
-                  <Field name="contrasenia">
-                    {({ input, meta }) => (
-                      <div class="row">
-
-                        <div class="column">
-                          <label>Contraseña</label>
-                          <input {...input} type="password" />
-                          {meta.touched}
-                        </div>
-
-                        <div class="column">
-                          {meta.error && <p>{meta.error}</p>}
-                        </div>
-                        
-                      </div>
-                    )}
-                  </Field>
-
-                  <Field name="nuevo_pw_confirm_button">
-                    {({ input, meta }) => (
-                      <div class="row">
-
-                        <div class="column">
-                          {meta.error && <p>{meta.error}</p>}
-                        </div>
-                        <div>
-
-                          <button type="submit" onClick={this.onCancel}>
-                            Ingresar
-                          </button>
-
-                        </div>
-                      </div>
-                    )}
-                  </Field>
-                  <FormSpy
-                  onChange={props => {
-                    this.changeStateValues(values)
-                  }}
-                />
-                </form>
-              )
-            }}
-          />
-        </FormStyles>
+                      <Field name="nuevo_pw_confirm_button">
+                        {({ input, meta }) => (
+                          <div class="rowCustom centerFlex">
+                            <button
+                              class="loginButton"
+                              type="submit"
+                              onClick={this.onCancel}
+                            >
+                              Ingresar
+                            </button>
+                          </div>
+                        )}
+                      </Field>
+                      <FormSpy
+                        onChange={props => {
+                          this.changeStateValues(values)
+                        }}
+                      />
+                    </form>
+                  </div>
+                )
+              }}
+            />
+          </FormStyles>
+        </div>
       </Layout>
     )
   }
